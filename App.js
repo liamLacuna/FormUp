@@ -12,9 +12,9 @@ import DashboardScreen from './src/screens/DashboardScreen';
 import firebase from 'firebase';
 import { firebaseConfig } from './src/config';
 
-// if (!firebase.apps.length) {
-firebase.initializeApp(firebaseConfig);
-// }
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 const AppStack = createStackNavigator({
   Dashboard: DashboardScreen
@@ -38,7 +38,7 @@ const AppSwitchNavigator = createSwitchNavigator(
     Auth: AuthStack
   },
   {
-    initialRouteName: "Auth"
+    initialRouteName: "Loading"
   }
 ) 
 

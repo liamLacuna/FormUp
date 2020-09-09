@@ -1,5 +1,7 @@
 import React, { Component }from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+
+import * as firebase from 'firebase'
 
 class DashboardScreen extends Component {
 	state = {
@@ -20,7 +22,7 @@ class DashboardScreen extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text>Hi {this.state.email}!</Text>
+				<Text>Hi {this.state.displayName}!</Text>
 
 				<TouchableOpacity style={{ marginTop: 32 }} onPress={this.signOutUser}>
 					<Text>Logout</Text>

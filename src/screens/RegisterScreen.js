@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from "react-native";
 import * as firebase from "firebase";
 
 export default class RegisterScreen extends React.Component {
@@ -25,6 +25,11 @@ export default class RegisterScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <Image
+					source={require("../assets/FormUpLogo.png")}
+					style={{ marginTop: 0, alignSelf: "center" }}
+				></Image>
+
                 <Text style={styles.greeting}>{`Hello!\nSign up to get started.`}</Text>
 
                 <View style={styles.errorMessage}>
@@ -68,9 +73,13 @@ export default class RegisterScreen extends React.Component {
                     <Text style={{ color: "#FFF", fontWeight: "500" }}>Sign up</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ alignSelf: "center", marginTop: 32 }}>
+                <TouchableOpacity 
+                    style={{ alignSelf: "center", marginTop: 32 }} 
+                    onPress={() => this.props.navigation.navigate("Login")}
+                >
                     <Text style={{ color: "#414959", fontSize: 13 }}>
-                        New to SocialApp? <Text style={{ fontWeight: "500", color: "#E9446A" }}>Login</Text>
+                        Already have a account ? 
+                        <Text style={{ fontWeight: "500", color: "#E9446A" }}>Login</Text>
                     </Text>
                 </TouchableOpacity>
             </View>

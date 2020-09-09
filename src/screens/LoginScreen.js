@@ -1,26 +1,36 @@
-import React, { Component }from 'react';
-import { StyleSheet, Text, View, Button, TextInput, TouchableOpacity } from 'react-native';
-import firebase from 'firebase';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, Button, 
+				TextInput, TouchableOpacity, Image, StatusBar, LayoutAnimation } 
+				from 'react-native';
+import * as firebase from 'firebase';
 
 class LoginScreen extends Component {
 	state ={
 		email: "",
 		password: "",
 		errorMessage: null
-	}
+	};
 
-	login = () => {
+	handleLogin = () => {
 		const { email, password } = this.state;
 
 		firebase
 			.auth()
 			.signInWithEmailAndPassword(email, password)
 			.catch(error => this.setState({errorMessage: error.message}));
-	}
+	};
 
 	render() {
+		LayoutAnimation.easeInEaseOut();
+
 		return (
 			<View style={styles.container}>
+				<StatusBar barStyle="light-content"></StatusBar>
+				<Image
+					source={require("../assets/FormUpLogo.png")}
+					style={{ marginTop: 0, alignSelf: "center" }}
+				></Image>
+
 				<Text style={styles.greeting}>{`Welcome Back`}</Text>
 
 				<View style={styles.errorMessage}>
@@ -49,7 +59,7 @@ class LoginScreen extends Component {
 					</View>
 				</View>
 
-				<TouchableOpacity style={styles.signIn} onPress={this.login}>
+				<TouchableOpacity style={styles.signIn} onPress={this.handleLogin}>
 					<Text style={styles.signInText}>Sign In</Text>
 				</TouchableOpacity>
 
