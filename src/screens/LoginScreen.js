@@ -5,6 +5,10 @@ import { StyleSheet, Text, View, Button,
 import * as firebase from 'firebase';
 
 class LoginScreen extends Component {
+	static navigationOptions = {
+		header: null
+	};
+
 	state ={
 		email: "",
 		password: "",
@@ -28,7 +32,7 @@ class LoginScreen extends Component {
 				<StatusBar barStyle="light-content"></StatusBar>
 				<Image
 					source={require("../assets/FormUpLogo.png")}
-					style={{ marginTop: 0, alignSelf: "center" }}
+					style={{ marginTop: 130, alignSelf: "center" }}
 				></Image>
 
 				<Text style={styles.greeting}>{`Welcome Back`}</Text>
