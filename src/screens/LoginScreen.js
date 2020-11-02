@@ -112,46 +112,46 @@ class LoginScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+	container: {
 		flex: 1,
-    backgroundColor: '#fff',
-  },
-  greeting: {
-    marginTop: 32,
-    fontSize: 18,
-    fontWeight: "400",
-    textAlign: "center"
-  },
-  errorMessage: {
-    height: 72,
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: 30
-  },
-  error: {
-    color: "#E9446a",
-    fontSize: 13,
-    fontWeight: "600",
-    textAlign: "center"
-  },
-  form: {
-    marginBottom: 48,
-    marginHorizontal: 30
-  },
-  inputTitle: {
-    color: "#8A8F9E",
-    fontSize: 10,
-    textTransform: "uppercase"
-  },
-  input: {
-    borderBottomColor: "#8A8F9E",
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    height: 40,
-    fontSize: 15,
-    color: "#161F3D"
-  },
-  passwordField: {
-    marginTop: 32
+    	backgroundColor: '#fff',
+  	},
+	greeting: {
+		marginTop: 32,
+		fontSize: 18,
+		fontWeight: "400",
+		textAlign: "center"
+	},
+	errorMessage: {
+		height: 72,
+		alignItems: "center",
+		justifyContent: "center",
+		marginHorizontal: 30
+	},
+	error: {
+		color: "#E9446a",
+		fontSize: 13,
+		fontWeight: "600",
+		textAlign: "center"
+	},
+	form: {
+		marginBottom: 48,
+		marginHorizontal: 30
+	},
+	inputTitle: {
+		color: "#8A8F9E",
+		fontSize: 10,
+		textTransform: "uppercase"
+	},
+	input: {
+		borderBottomColor: "#8A8F9E",
+		borderBottomWidth: StyleSheet.hairlineWidth,
+		height: 40,
+		fontSize: 15,
+		color: "#161F3D"
+	},
+	passwordField: {
+    	marginTop: 32
 	},
 	signIn: {
 		marginHorizontal: 30,
