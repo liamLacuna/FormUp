@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, 
-				TextInput, TouchableOpacity, Image, StatusBar, LayoutAnimation } 
-				from 'react-native';
+import {
+	StyleSheet, Text, View, Alert,
+	TextInput, TouchableOpacity, Image, StatusBar,
+	LayoutAnimation, ScrollView, ActivityIndicator
+} from 'react-native';
 import * as firebase from 'firebase';
 
 class LoginScreen extends Component {
@@ -12,17 +14,39 @@ class LoginScreen extends Component {
 	state ={
 		email: "",
 		password: "",
-		errorMessage: null
+		errorMessage: null,
+		loading: false
 	};
 
 	handleLogin = () => {
 		const { email, password } = this.state;
+		this.setState({ loading: true });
 
 		firebase
 			.auth()
 			.signInWithEmailAndPassword(email, password)
-			.catch(error => this.setState({errorMessage: error.message}));
+			.catch(error => this.setState({ errorMessage: error.message, loading: false }));
 	};
+
+	restore_password = () => {
+		if (this.state.email == '') {
+			Alert.alert('Alert', 'Enter email address.');
+		} else {
+			var emailAddress = this.state.email.toLowerCase();
+
+			firebase.auth()
+			.sendPasswordResetEmail(emailAddress)
+				.then(function () {
+					Alert.alert(
+						'Alert',
+						'A link has been sent to your email address to reset your password.',
+					);
+				})
+				.catch(function (error) {
+					Alert.alert('Error', error.message);
+				});
+		}
+	}
 
 	render() {
 		LayoutAnimation.easeInEaseOut();
@@ -65,6 +89,12 @@ class LoginScreen extends Component {
 
 				<TouchableOpacity style={styles.signIn} onPress={this.handleLogin}>
 					<Text style={styles.signInText}>Sign In</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					style={styles.buttonContainer}
+					onPress={this.restore_password}>
+					<Text style={styles.forgot}>Forgot Password?</Text>
 				</TouchableOpacity>
 
 				<TouchableOpacity
@@ -146,7 +176,12 @@ const styles = StyleSheet.create({
 	signUpText: {
 		fontWeight: "500",
 		color: "#E9446A"
-	}
+	},
+	forgot: {
+		textAlign: "center",
+		marginTop: 10,
+		color: "#E9446A",
+	},
 });
 
 export default LoginScreen
