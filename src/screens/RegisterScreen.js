@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ActivityIndicator, ScrollView} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as firebase from "firebase";
+import * as ImagePicker from 'expo-image-picker';
 
 export default class RegisterScreen extends React.Component {
 	static navigationOptions = {
@@ -12,44 +13,75 @@ export default class RegisterScreen extends React.Component {
 		name: "",
 		email: "",
 		password: "",
-		errorMessage: null
+		image: null,
+		errorMessage: null,
+		loading: false
 	};
 
 	handleSignUp = () => {
+		this.setState({ loading: true });
 		firebase
 			.auth()
 			.createUserWithEmailAndPassword(this.state.email, this.state.password)
 			.then(userCredentials => {
 				return userCredentials.user.updateProfile({
-					displayName: this.state.name
+					displayName: this.state.name,
+					photoURL: this.state.image
 				});
 			})
-			.catch(error => this.setState({ 
-				errorMessage: error.message 
+			.catch(error => this.setState({
+				errorMessage: error.message,
+				loading: false
 			}));
+
+	};
+
+	pickImage = async () => {
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+		});
+
+		// console.log(result);
+
+		if (!result.cancelled) {
+			{
+				this.setState({
+					image: result.uri
+				});
+			}
+		}
 	};
 
 	render() {
 		return (
-			<View style={styles.container}>
+			<ScrollView style={styles.container}>
 				<TouchableOpacity style={styles.back} onPress={() => this.props.navigation.goBack()}>
 						<Ionicons name="ios-arrow-round-back" size={32} color="#FFF"></Ionicons>
 				</TouchableOpacity>
 
-				<View style={{ position: "absolute", top: 64, alignItems: "center", width: "100%" }}>
+				<View style={{ position: "absolute", alignItems: "center", width: "100%" }}>
 					<Text style={styles.greeting}>{`Hello!\nSign up to get started.`}</Text>
-					<TouchableOpacity style={styles.avatar}>
-						<Ionicons
-								name="ios-add"
-								size={40}
-								color="#FFF"
-								style={{ marginTop: 6, marginLeft: 2 }}
-						></Ionicons>
+
+					<TouchableOpacity onPress={this.pickImage}>
+
+						{this.state.image === null ? (
+							<Image
+								style={styles.avatar}
+								source={require('../assets/profile.png')}
+							/>
+
+						) : (
+								<Image style={styles.avatar} source={{ uri: this.state.image }} />
+							)}
+
 					</TouchableOpacity>
 				</View>
 
 				<View style={styles.errorMessage}>
-						{this.state.errorMessage && <Text style={styles.error}>{this.state.errorMessage}</Text>}
+					{this.state.errorMessage && <Text style={styles.error}>{this.state.errorMessage}</Text>}
 				</View>
 
 				<View style={styles.form}>
@@ -85,20 +117,27 @@ export default class RegisterScreen extends React.Component {
 					</View>
 				</View>
 
-				<TouchableOpacity style={styles.button} onPress={this.handleSignUp}>
-						<Text style={{ color: "#FFF", fontWeight: "500" }}>Sign up</Text>
+				<TouchableOpacity
+					disabled={this.state.loading}
+					style={styles.button}
+					onPress={this.handleSignUp}>
+					{this.state.loading ? (
+						<ActivityIndicator size="small" color="#000000" animating={this.state.loading} />
+					) : (
+							<Text style={{ color: "#000000", fontWeight: "500" }}>Sign up</Text>
+						)}
 				</TouchableOpacity>
 
-				<TouchableOpacity 
-					style={{ alignSelf: "center", marginTop: 32 }} 
+				<TouchableOpacity
+					style={{ alignSelf: "center", marginTop: 32 }}
 					onPress={() => this.props.navigation.navigate("Login")}
 				>
-					<Text style={{ color: "#414959", fontSize: 13 }}>
-						Already have a account ? 
-						<Text style={{ fontWeight: "500", color: "#E9446A" }}>Login</Text>
+					<Text style={{ fontSize: 13 }}>
+						Already have a account?
+						<Text style={{ fontWeight: "500", color: "#E9446A" }}> Login</Text>
 					</Text>
 				</TouchableOpacity>
-			</View>
+			</ScrollView>
 		);
 	}
 }
@@ -108,7 +147,7 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	greeting: {
-		marginTop: 32,
+		marginTop: 100,
 		fontSize: 18,
 		fontWeight: "400",
 		textAlign: "center"
