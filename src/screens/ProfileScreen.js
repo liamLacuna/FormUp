@@ -8,6 +8,7 @@ export default class ProfileScreen extends React.Component {
 				<Text>Profile Screen</Text>
 				<TouchableOpacity style={{ marginTop: 32 }} onPress={this.signOutUser}>
 					<Text>Logout</Text>
+					<Text>test</Text>
 				</TouchableOpacity>
 			</View>
 		);
