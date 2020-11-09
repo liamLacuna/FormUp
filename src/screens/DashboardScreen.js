@@ -7,17 +7,18 @@ import {
   Image,
   ActivityIndicator,
   Alert,
+  FlatList
 } from "react-native";
 import { Icon } from "react-native-elements";
 import { Container, Content, Accordion } from "native-base";
-import Loading from "./common/Loading";
+import Loading from "./components/Loading";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
 
-class DashboardScreen extends Component {
+class DashboardScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -159,14 +160,14 @@ class DashboardScreen extends Component {
         </Text>
         <Text style={styles.description}>{item.maxPeople} </Text>
 
-        {/* <View style={{ alignItems: "center", backgroundColor: "#3e4540" }}>
+        <View style={{ alignItems: "center", backgroundColor: "#3e4540" }}>
           <TouchableOpacity
             style={[styles.buttonContainer, styles.joinButton]}
             onPress={() => joinGroup(item.name, item.admin)}
           >
             <Text style={styles.joinText}>Join Group</Text>
           </TouchableOpacity>
-        </View> */}
+        </View>
       </View>
     );
   }
@@ -217,56 +218,125 @@ class DashboardScreen extends Component {
   }
 }
 
+async function sendPushNotification(expoPushToken, groupName) {
+  var user = firebase.auth().currentUser;
+
+  const message = {
+    to: expoPushToken,
+    sound: "default",
+    title: "Group Joined Notification",
+    body: `${user.displayName} has joined your group ${groupName}`,
+  };
+
+  await fetch("https://exp.host/--/api/v2/push/send", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Accept-encoding": "gzip, deflate",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(message),
+  });
+}
+
+function isUserExists(members, user) {
+  for (var i = 0; i < members.length; ) {
+    if (user.email == members[i]) {
+      return true;
+    } else {
+      i++;
+    }
+  }
+
+  return false;
+}
+
+async function joinGroup(groupName, admin) {
+  const ref = firebase.firestore().collection("Groups").doc(groupName);
+  const doc = await ref.get();
+
+  var user = firebase.auth().currentUser;
+  var members = doc.data().groupMembers;
+
+  if (members.length == doc.data().MaximumPeople) {
+    alert("Group limit has reached, you cannot join.");
+  } else if (isUserExists(members, user)) {
+    alert("You are already in this group.");
+  } else {
+    await ref.update({
+      groupMembers: firebase.firestore.FieldValue.arrayUnion(user.email),
+    });
+
+    const tokenRef = firebase.firestore().collection("UserTokens").doc(admin);
+    const tokenDoc = await tokenRef.get();
+
+    const expoPushToken = tokenDoc.data().token;
+
+    sendPushNotification(expoPushToken, groupName);
+
+    Alert.alert("Success", "You have joined group successfully.");
+  }
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
     marginTop: -10,
-    backgroundColor: "#232624"
+    backgroundColor: "#232624",
   },
+
   back: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    marginTop: -0
+    marginTop: -0,
   },
+
   saved: {
     fontSize: 18,
     fontWeight: "bold",
-    marginLeft: 7
+    marginLeft: 7,
   },
+
   list: {
     flex: 1,
     marginRight: -5,
     marginLeft: -5,
-    marginTop: -10
+    marginTop: -10,
   },
+
   description: {
     backgroundColor: "#3e4540",
     padding: 10,
     fontStyle: "italic",
-    color: "white"
+    color: "white",
   },
+
   bold: {
     backgroundColor: "#3e4540",
     padding: 10,
     fontStyle: "italic",
     fontWeight: "bold",
-    color: "white"
+    color: "white",
   },
+
   backgroundColor: {
     backgroundColor: "#3e4540",
-    alignItems: "center"
+    alignItems: "center",
   },
+
   tinyLogo: {
     width: 270,
-    height: 200
+    height: 200,
   },
+
   title: {
     alignItems: "center",
     margin: 10,
     marginTop: -10,
-    padding: 8
+    padding: 8,
   },
+
   titleText: {
     fontSize: 20,
     fontWeight: "bold",
@@ -274,12 +344,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginRight: 30,
     marginLeft: 30,
-    color: "white"
+    color: "white",
   },
+
   addButton: {
     color: "#E9446A",
-    margin: 8
+    margin: 8,
   },
+
   buttonContainer: {
     height: 30,
     flexDirection: "row",
@@ -287,13 +359,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
     width: 100,
-    borderRadius: 4
+    borderRadius: 4,
   },
+
   joinButton: {
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
+
   joinText: {
-    color: "#232624"
+    color: "#232624",
   },
 });
 
