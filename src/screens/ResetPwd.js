@@ -10,7 +10,18 @@ class LoginScreen extends Component {
 	static navigationOptions = {
 		header: null
 	};
+  function Forgotpassword({navigation}) {
+    const [currentPwd, setCurrentPwd] = useState('');
+    const [newPwd, setNewPwd] = useState('');
+    const [loading, setLoading] = useState(false);
 
+    // Reauthenticates the current user
+    const reauthenticate = (currentPassword) => {
+      let user = firebase.auth().currentUser;
+      let cred = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
+      return user.reauthenticateWithCredential(cred);
+    };
+  }
 	state ={
 		email: "",
 		password: "",
