@@ -21,6 +21,34 @@ class LoginScreen extends Component {
       let cred = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
       return user.reauthenticateWithCredential(cred);
     };
+    // Changes user password
+    const onChangePasswordPress = () => {
+      if (currentPwd.length !== 0 && newPwd.length !== 0) {
+        setLoading(true);
+        reauthenticate(currentPwd)
+          .then(() => {
+            let user = firebase.auth().currentUser;
+            user
+              .updatePassword(newPwd)
+              .then(() => {
+                setLoading(false);
+                Alert.alert('Success', 'Password changed');
+                navigation.goBack();
+              })
+              .catch((error) => {
+                setLoading(false);
+                Alert.alert('Error', error.message);
+              });
+          })
+          .catch((error) => {
+            setLoading(false);
+            Alert.alert('Error', error.message);
+            console.log(error.message);
+          });
+      } else {
+        Alert.alert('Error', 'Empty not allow');
+      }
+    };
   }
 	state ={
 		email: "",
