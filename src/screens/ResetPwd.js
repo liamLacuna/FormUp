@@ -49,6 +49,29 @@ class LoginScreen extends Component {
         Alert.alert('Error', 'Empty not allow');
       }
     };
+    return (
+      <View style={styles.container}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.inputs}
+            placeholder="Current Password"
+            value={currentPwd}
+            secureTextEntry={true}
+            underlineColorAndroid="transparent"
+            onChangeText={setCurrentPwd}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.inputs}
+            placeholder="New Password"
+            secureTextEntry={true}
+            value={newPwd}
+            underlineColorAndroid="transparent"
+            onChangeText={setNewPwd}
+          />
+        </View>
   }
 	state ={
 		email: "",
