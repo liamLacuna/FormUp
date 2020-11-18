@@ -14,6 +14,96 @@ import * as firebase from "firebase";
 import Loading from "./common/Loading";
 
 function ProfileScreen({ navigation }) {
+  const [name, setName] = useState('');
+	const [email, setEmail] = useState('');
+	const [photo, setPhoto] = useState('');
+	const [loading, setLoading] = useState(false);
+	const [nameEdit, setNameEdit] = useState(false);
+
+	const [isDialogVisible, setDialogVisible] = useState(false);
+
+	const showDialog = () => {
+		setDialogVisible(true);
+	};
+
+	const hideDialog = () => {
+		setDialogVisible(false);
+	};
+
+	var user = firebase.auth().currentUser;
+
+	async function resetPassword(inputText) {
+		var newPassword = inputText;
+
+		user
+			.updatePassword(newPassword)
+			.then(function () {
+				Alert.alert('Success', 'Your password has been changed successfully.');
+				hideDialog();
+			})
+			.catch(function (error) {
+				Alert.alert('Error', error.message);
+			});
+	}
+
+	async function getData() {
+		setLoading(true);
+		let user = firebase.auth().currentUser;
+		if (user != null) {
+			setName(user.displayName);
+			setEmail(user.email);
+			setPhoto(user.photoURL);
+		}
+		setLoading(false);
+	}
+
+	const pickImage = async () => {
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+		});
+
+		console.log(result);
+
+		if (!result.cancelled) {
+			{
+				user
+					.updateProfile({
+						photoURL: result.uri,
+					})
+					.then(function () {
+						getData();
+						Alert.alert('Success', 'Photo Updated.');
+					})
+					.catch(function (error) {
+						Alert.alert('Error', errr.message);
+					});
+			}
+		}
+	};
+
+	// Change Name
+	const changeName = (name) => {
+		setLoading(true);
+		setNameEdit(false);
+
+		user.updateProfile({
+			displayName: name
+		}).then(() => {
+			getData();
+		})
+			.catch((err) => {
+				setLoading(false);
+				Alert.alert('Error', 'Something went wrong');
+			});
+
+	};
+	useEffect(() => {
+		getData();
+  }, []);
+  
   return (
     <View style={styles.container}>
       <Loading loading={loading} />
@@ -74,7 +164,7 @@ function ProfileScreen({ navigation }) {
             name="edit"
             size={15}
             iconStyle={styles.nameEdit}
-            // onPress={() => setNameEdit(true)}
+            onPress={() => setNameEdit(true)}
           />
         </View>
       </View>
@@ -96,7 +186,7 @@ function ProfileScreen({ navigation }) {
       <View style={styles.links}>
         <TouchableOpacity
           style={styles.reset}
-          //   onPress={() => navigation.navigate("Reset")}
+          onPress={() => navigation.navigate("Reset")}
         >
           <Text style={styles.resetText}>Reset password</Text>
         </TouchableOpacity>
@@ -105,16 +195,16 @@ function ProfileScreen({ navigation }) {
           isDialogVisible={isDialogVisible}
           title={"Reset Password"}
           hintInput={"Enter New Password"}
-          //   submitInput={(inputText) => resetPassword(inputText)}
-          //   closeDialog={() => hideDialog()}
+          submitInput={(inputText) => resetPassword(inputText)}
+          closeDialog={() => hideDialog()}
         />
 
         <DialogInput
           isDialogVisible={nameEdit}
           title={"Change Name"}
           hintInput={"Enter New Name"}
-          //   submitInput={(inputText) => changeName(inputText)}
-          //   closeDialog={() => setNameEdit(false)}
+          submitInput={(inputText) => changeName(inputText)}
+          closeDialog={() => setNameEdit(false)}
         />
       </View>
     </View>
