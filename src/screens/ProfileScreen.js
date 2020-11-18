@@ -96,7 +96,7 @@ function ProfileScreen({ navigation }) {
       <View style={styles.links}>
         <TouchableOpacity
           style={styles.reset}
-        //   onPress={() => navigation.navigate("Reset")}
+          //   onPress={() => navigation.navigate("Reset")}
         >
           <Text style={styles.resetText}>Reset password</Text>
         </TouchableOpacity>
@@ -105,16 +105,16 @@ function ProfileScreen({ navigation }) {
           isDialogVisible={isDialogVisible}
           title={"Reset Password"}
           hintInput={"Enter New Password"}
-        //   submitInput={(inputText) => resetPassword(inputText)}
-        //   closeDialog={() => hideDialog()}
+          //   submitInput={(inputText) => resetPassword(inputText)}
+          //   closeDialog={() => hideDialog()}
         />
 
         <DialogInput
           isDialogVisible={nameEdit}
           title={"Change Name"}
           hintInput={"Enter New Name"}
-        //   submitInput={(inputText) => changeName(inputText)}
-        //   closeDialog={() => setNameEdit(false)}
+          //   submitInput={(inputText) => changeName(inputText)}
+          //   closeDialog={() => setNameEdit(false)}
         />
       </View>
     </View>
@@ -123,8 +123,75 @@ function ProfileScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: "column",
     flex: 1,
+    backgroundColor: "#232624"
+  }
+  header: {
+    marginTop: 30,
     alignItems: "center",
+    flex: 3
+  }
+  avatar: {
+    borderColor: "white",
+    borderWidth: 1,
+    width: 120,
+    height: 120,
+    borderRadius: 63
+  }
+  bodyContent: {
+    alignItems: "center",
+    marginTop: 70,
+    borderColor: "white",
+    borderWidth: 1,
+    marginHorizontal: 30,
+    paddingHorizontal: 20
+  }
+  name: {
+    fontSize: 23,
+    color: "white",
+    fontWeight: "600",
+    marginTop: 5
+  }
+  iconRow: {
+    flex: 2,
     justifyContent: "center",
+    marginLeft: -20
+  }
+  emailRow: {
+    flex: 8,
+    flexDirection: "column"
+  }
+  emailContainer: {
+    margin: 5,
+    flexDirection: "row",
+    justifyContent: "flex-start"
+  }
+  emailText: {
+    fontSize: 16,
+    color: "white"
+  }
+  reset: {
+    marginTop: 30,
+    backgroundColor: "white",
+    borderRadius: 6,
+    width: 120,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center"
+  }
+  resetText: {
+    color: "#232624",
+    fontWeight: "600",
+    fontSize: 15
+  }
+  links: {
+    flex: 5,
+    margin: 10,
+    alignItems: "center"
+  }
+  nameEdit: {
+    color: "white",
+    paddingTop: 6
   },
 });
