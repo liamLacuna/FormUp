@@ -11,9 +11,9 @@ import { Icon, Button } from "react-native-elements";
 import DialogInput from "react-native-dialog-input";
 import * as ImagePicker from "expo-image-picker";
 import * as firebase from "firebase";
-import Loading from "./common/Loading";
+import Loading from "./components/Loading";
 
-function ProfileScreen({ navigation }) {
+export default function ProfileScreen({ navigation }) {
   const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [photo, setPhoto] = useState('');
@@ -216,19 +216,19 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     flex: 1,
     backgroundColor: "#232624"
-  }
+  },
   header: {
     marginTop: 30,
     alignItems: "center",
     flex: 3
-  }
+  },
   avatar: {
     borderColor: "white",
     borderWidth: 1,
     width: 120,
     height: 120,
     borderRadius: 63
-  }
+  },
   bodyContent: {
     alignItems: "center",
     marginTop: 70,
@@ -236,31 +236,31 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginHorizontal: 30,
     paddingHorizontal: 20
-  }
+  },
   name: {
     fontSize: 23,
     color: "white",
     fontWeight: "600",
     marginTop: 5
-  }
+  },
   iconRow: {
     flex: 2,
     justifyContent: "center",
     marginLeft: -20
-  }
+  },
   emailRow: {
     flex: 8,
     flexDirection: "column"
-  }
+  },
   emailContainer: {
     margin: 5,
     flexDirection: "row",
     justifyContent: "flex-start"
-  }
+  },
   emailText: {
     fontSize: 16,
     color: "white"
-  }
+  },
   reset: {
     marginTop: 30,
     backgroundColor: "white",
@@ -269,17 +269,17 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: "center",
     justifyContent: "center"
-  }
+  },
   resetText: {
     color: "#232624",
     fontWeight: "600",
     fontSize: 15
-  }
+  },
   links: {
     flex: 5,
     margin: 10,
     alignItems: "center"
-  }
+  },
   nameEdit: {
     color: "white",
     paddingTop: 6

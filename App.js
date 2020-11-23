@@ -1,8 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { Component }from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { creatStackNavigator, createStackNavigator } from "react-navigation-stack";
+import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -12,36 +10,66 @@ import RegisterScreen from './src/screens/RegisterScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import MessageScreen from './src/screens/MessageScreen';
-import NotificationScreen from './src/screens/NotificationScreen';
+import ChatScreen from './src/screens/ChatScreen';
+import ResetPwd from './src/screens/ResetPwd';
+import CreateGroup from './src/screens/CreateGroup';
 
 import firebase from 'firebase';
-import { firebaseConfig } from './src/config';
+import { firebaseConfig } from './env/config';
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
+const ProfileStack = createStackNavigator({
+  Profile: ProfileScreen,
+  Reset: ResetPwd
+},
+{
+  headerMode: 'none',
+  navigationOptions: {
+      headerVisible: false,
+  }
+});
+
+const DashboardStack = createStackNavigator({
+  Dashboard: DashboardScreen,
+  Group: CreateGroup
+},
+{
+  headerMode: 'none',
+  navigationOptions: {
+      headerVisible: false,
+  }
+});
+
+const ChatingScreen = createStackNavigator({
+  Message: MessageScreen,
+  Chat: ChatScreen,
+},
+{
+  headerMode: 'none',
+  navigationOptions: {
+      headerVisible: false,
+  }
+}
+);
+
 const AppTabNavigator = createBottomTabNavigator({
   Dashboard: {
-    screen: DashboardScreen,
-    navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-home" size={24} color={tintColor} />
+    screen: DashboardStack,
+    navigationOptions: { 
+      tabBarIcon: ({ tintColor }) => <Ionicons name="ios-home" size={24} color={tintColor} />
     }
   },
   Message: {
-    screen: MessageScreen,
+    screen: ChatingScreen,
     navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-chatboxes" size={24} color={tintColor} />
     }
   },
-  Notification: {
-    screen: NotificationScreen,
-    navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Ionicons name="ios-notifications" size={24} color={tintColor} />
-    }
-  },
   Profile: {
-    screen: ProfileScreen,
+    screen: ProfileStack,
     navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Ionicons name="ios-person" size={24} color={tintColor} />
     }
@@ -49,9 +77,11 @@ const AppTabNavigator = createBottomTabNavigator({
 },
 {
   tabBarOptions: {
-    activeTintColor: "#161F3D",
-    inactiveTintColor: "#B8BBC4",
-    showLabel: false
+    activeTintColor: "white",
+    inactiveTintColor: "#4e5751",
+    showLabel: true,
+    activeBackgroundColor: "#232624",
+    inactiveBackgroundColor: "#232624"
   }
 }
 );
