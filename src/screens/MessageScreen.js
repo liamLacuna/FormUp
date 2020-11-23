@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   SectionList,
 } from "react-native";
-//import Constants from 'expo-constants';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as firebase from "firebase";
 import "firebase/firestore";
