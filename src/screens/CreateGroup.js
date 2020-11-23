@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import 'react-native-gesture-handler';
+import React, { useState } from "react";
+import "react-native-gesture-handler";
 import {
   StyleSheet,
   Text,
@@ -11,18 +11,18 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
-} from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import * as firebase from "firebase";
-import 'firebase/firestore';
-import 'firebase/storage';
+import "firebase/firestore";
+import "firebase/storage";
 
 function CreateGroup({ navigation }) {
-  const [groupName, setGroupName] = useState('');
-  const [requiredSkill, setRequiredSkill] = useState('');
-  const [maxPeople, setMaxPeople] = useState('');
+  const [groupName, setGroupName] = useState("");
+  const [requiredSkill, setRequiredSkill] = useState("");
+  const [maxPeople, setMaxPeople] = useState("");
   const [image, setImage] = useState(null);
-  const [dbURL, setDbURL] = useState('');
+  const [dbURL, setDbURL] = useState("");
   const [loading, setLoading] = useState(false);
 
   const selectImage = async () => {
@@ -36,28 +36,23 @@ function CreateGroup({ navigation }) {
     console.log(result);
 
     if (!result.cancelled) {
-
       setImage(result.uri);
       //setFileName(result);
     }
   };
 
   const uploadImage = async (uri) => {
-
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = () => {
         resolve(xhr.response);
       };
-      xhr.responseType = 'blob';
-      xhr.open('GET', uri, true);
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
       xhr.send(null);
     });
 
-    const ref = firebase
-      .storage()
-      .ref()
-      .child(`groups/${groupName}`);
+    const ref = firebase.storage().ref().child(`groups/${groupName}`);
 
     let snapshot = await ref.put(blob);
 
@@ -76,46 +71,41 @@ function CreateGroup({ navigation }) {
         createdAt: new Date().toString(),
         createdBy: user.email,
         groupMembers: [user.email],
-        Messages:[]
+        Messages: [],
       };
 
-      firebase.firestore()
-        .collection('Groups')
+      firebase
+        .firestore()
+        .collection("Groups")
         .doc(groupName)
         .set(group)
         .then(() => {
           setLoading(false);
-          setGroupName('');
-          setRequiredSkill('');
-          setMaxPeople('');
+          setGroupName("");
+          setRequiredSkill("");
+          setMaxPeople("");
           setImage(null);
-          setDbURL('');
+          setDbURL("");
         });
 
-      Alert.alert(
-        'Success',
-        'Your Group has been created successfully!',
-      );
+      Alert.alert("Success", "Your Group has been created successfully!");
     });
     setLoading(false);
   }
 
   return (
     <ScrollView style={styles.container}>
-
-      <SafeAreaView style={{alignItems: 'center'}}>
-
+      <SafeAreaView style={{ alignItems: "center" }}>
         <View style={styles.withoutBoder}>
-          <TouchableOpacity
-            onPress={selectImage}>
+          <TouchableOpacity onPress={selectImage}>
             {image === null ? (
               <Image
                 style={styles.avatar}
-                source={require('../assets/default_group.png')}
+                source={require("../assets/default_group.png")}
               />
             ) : (
-                <Image style={styles.avatar} source={{ uri: image }} />
-              )}
+              <Image style={styles.avatar} source={{ uri: image }} />
+            )}
           </TouchableOpacity>
         </View>
 
@@ -123,6 +113,7 @@ function CreateGroup({ navigation }) {
           <TextInput
             style={styles.textinput1}
             placeholder="Group Name"
+            placeholderTextColor="#fff"
             keyboardType="default"
             value={groupName}
             underlineColorAndroid="transparent"
@@ -134,6 +125,7 @@ function CreateGroup({ navigation }) {
           <TextInput
             style={styles.textinput1}
             placeholder="Add Required Skill"
+            placeholderTextColor="#fff"
             keyboardType="default"
             value={requiredSkill}
             underlineColorAndroid="transparent"
@@ -146,6 +138,7 @@ function CreateGroup({ navigation }) {
           <TextInput
             style={styles.textinput1}
             placeholder="Group Limit"
+            placeholderTextColor="#fff"
             keyboardType="default"
             value={maxPeople}
             underlineColorAndroid="transparent"
@@ -158,7 +151,8 @@ function CreateGroup({ navigation }) {
           <TouchableOpacity
             disabled={loading}
             style={[styles.buttonContainer, styles.loginButton]}
-            onPress={() => uploadGroupData()}>
+            onPress={() => uploadGroupData()}
+          >
             {loading ? (
               <ActivityIndicator
                 size="small"
@@ -166,8 +160,8 @@ function CreateGroup({ navigation }) {
                 animating={loading}
               />
             ) : (
-                <Text style={styles.loginText}>Create Group</Text>
-              )}
+              <Text style={styles.loginText}>Create Group</Text>
+            )}
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -182,7 +176,7 @@ const styles = StyleSheet.create({
   },
 
   input1: {
-    borderColor: '#8A8F9E',
+    borderColor: "#8A8F9E",
     backgroundColor: "#232624",
     borderRadius: 4,
     borderWidth: 1,
@@ -190,14 +184,14 @@ const styles = StyleSheet.create({
     height: 45,
     marginTop: 20,
     marginBottom: 20,
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
   },
 
   buttonContainer: {
     height: 45,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 20,
     width: 300,
     borderRadius: 4,
@@ -212,13 +206,13 @@ const styles = StyleSheet.create({
   },
 
   withoutBoder: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 20,
   },
 
   back: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 20,
     marginTop: 10,
     marginRight: 120,
@@ -226,7 +220,7 @@ const styles = StyleSheet.create({
 
   avatar: {
     marginTop: 50,
-    borderColor: 'white',
+    borderColor: "white",
     borderWidth: 1,
     width: 120,
     height: 120,
@@ -240,21 +234,21 @@ const styles = StyleSheet.create({
 
   saved: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginLeft: 7,
-    textDecorationLine: 'underline',
+    textDecorationLine: "underline",
   },
 
   textinput1: {
     marginLeft: 16,
-    borderBottomColor: '#FFFFFF',
-    color: 'white'
+    borderBottomColor: "#FFFFFF",
+    color: "white",
   },
 
   imageBox: {
     width: 250,
     height: 200,
-    alignItems: 'center',
+    alignItems: "center",
   },
 });
 
