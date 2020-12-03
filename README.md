@@ -1,6 +1,7 @@
 # FormUp
 An iOS application to recruit/form people with engineering skills. A platform to publish temporary projects, it also gives the talents opportunities to apply their skills. Evaluate the skills and matches the most talented people to the recommended projects
-   
+
+Project LINK: https://github.com/liamLacuna/FormUp
 
 ## Getting Started
 
@@ -27,6 +28,17 @@ yarn start --ios
 ```
 expo start --ios
 ```
+
+## Code Structure
+ Required tech stack: React Native, Expo, Firebase
+ 
+ -  node_modules (Packages)
+ - env (enviornment file or confirgutaion file)
+ - src
+   - assets (contains local images)
+   - screens (contains screen of the application)
+ - App.js(entry point of the application)
+ - package.json
 
 
 ## Authors
